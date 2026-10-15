@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NUTRI - FIGHT | Evaluación Fisiológica y Antropométrica para Deportes de Combate</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0f172a',
+                            card: '#1e293b',
+                            accent: '#e11d48',
+                            emerald: '#10b981',
+                            amber: '#f59e0b',
+                            blue: '#3b82f6'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white !important; color: black !important; }
+            .print-card { background: white !important; border: 1px solid #ccc !important; color: black !important; box-shadow: none !important; }
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen custom-scrollbar selection:bg-rose-500 selection:text-white">
+
+    <!-- Encabezado / Header -->
+    <header class="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-wrap justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="bg-gradient-to-tr from-rose-600 to-red-500 p-2.5 rounded-xl shadow-lg shadow-rose-950/50">
+                    <i class="fa-solid font-bold fa-hand-fist text-2xl text-white"></i>
+                </div>
+                <div>
+                    <h1 class="font-display font-extrabold text-2xl tracking-wider text-white flex items-center gap-2">
+                        NUTRI <span class="text-rose-500">- FIGHT</span>
+                    </h1>
+                    <p class="text-xs text-slate-400 font-medium">Plataforma de Evaluación Fisiológica & Antropométrica de Alto Rendimiento</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-3 no-print">
+                <button onclick="cargarAtletaEjemplo('optimo')" class="px-3 py-1.5 text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 rounded-lg hover:bg-emerald-500/20 transition-all flex items-center gap-1.5">
+                    <i class="fa-solid fa-user-check"></i> Cargar Caso Óptimo
+                </button>
+                <button onclick="cargarAtletaEjemplo('riesgo')" class="px-3 py-1.5 text-xs font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/30 rounded-lg hover:bg-rose-500/20 transition-all flex items-center gap-1.5">
+                    <i class="fa-solid fa-triangle-exclamation"></i> Cargar Caso Riesgo
+                </button>
+                <button onclick="window.print()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-bold rounded-lg transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-file-pdf text-rose-400"></i> Exportar Reporte
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Banner Informativo de Instituciones de Referencia -->
+    <section class="bg-slate-900 border-b border-slate-800/80 py-2.5 text-xs text-slate-400">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap justify-between items-center gap-2">
+            <span class="flex items-center gap-2"><i class="fa-solid fa-building-columns text-rose-500"></i> Parámetros normativos integrados:</span>
+            <div class="flex flex-wrap items-center gap-4 text-[11px] font-semibold text-slate-300">
+                <span class="bg-slate-800 px-2.5 py-1 rounded-md border border-slate-700/50"><i class="fa-solid fa-globe text-blue-400 mr-1"></i> OMS / WHO</span>
+                <span class="bg-slate-800 px-2.5 py-1 rounded-md border border-slate-700/50"><i class="fa-solid fa-hospital text-indigo-400 mr-1"></i> Johns Hopkins University</span>
+                <span class="bg-slate-800 px-2.5 py-1 rounded-md border border-slate-700/50"><i class="fa-solid fa-award text-amber-400 mr-1"></i> COI / IOC</span>
+                <span class="bg-slate-800 px-2.5 py-1 rounded-md border border-slate-700/50"><i class="fa-solid fa-notes-medical text-emerald-400 mr-1"></i> IMSS</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contenido Principal -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- FORMULARIO DE CAPTURA DE DATOS (COLUMNA IZQUIERDA - 7 COLS) -->
+            <div class="lg:col-span-7 space-y-6">
+                
+                <!-- 1. Datos Personales y Deporte -->
+                <div class="bg-slate-900 rounded-2xl p-6 border border-slate-800 shadow-xl print-card">
+                    <h2 class="text-lg font-display font-bold text-slate-100 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-id-card text-rose-500"></i> 1. Información del Atleta
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Nombre Completo</label>
+                            <input type="text" id="nombre" value="Carlos 'El Volcán' Mendoza" oninput="calcularTodo()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-rose-500 transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Deporte de Combate</label>
+                            <select id="deporte" onchange="calcularTodo()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-rose-500 transition-colors">
+                                <option value="Boxeo">Boxeo Profesional / Olímpico</option>
+                                <option value="MMA" selected>Artes Marciales Mixtas (MMA)</option>
+                                <option value="Muay Thai">Muay Thai / Kickboxing</option>
+                                <option value="Jiu-Jitsu BJJ">Jiu-Jitsu Brasileño (BJJ)</option>
+                                <option value="Judo">Judo</option>
+                                <option value="Sambo">Sambo</option>
+                                <option value="Lucha">Lucha Olímpica (Grecorromana / Libre)</option>
+                                <option value="Taekwondo">Taekwondo</option>
+                                <option value="Karate">Karate Do</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Sexo Biológico</label>
+                            <select id="sexo" onchange="calcularTodo()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-rose-500 transition-colors">
+                                <option value="Masculino" selected>Masculino</option>
+                                <option value="Femenino">Femenino</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Edad (Años)</label>
+                            <input type="number" id="edad" value="25" min="12" max="65" oninput="calcularTodo()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-rose-500 transition-colors">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Signos Vitales y Parámetros Bioquímicos -->
+                <div class="bg-slate-900 rounded-2xl p-6 border border-slate-800 shadow-xl print-card">
+                    <h2 class="text-lg font-display font-bold text-slate-100 mb-4 flex items-center justify-between">
+                        <span class="flex items-center gap-2"><i class="fa-solid fa-heart-pulse text-rose-500"></i> 2. Signos Vitales & Bioquímica</span>
+                        <span class="text-xs font-normal text-slate-400">Norma OMS / Johns Hopkins / IMSS</span>
+                    </h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Frecuencia Respiratoria -->
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="text-xs font-semibold text-slate-400 uppercase">Frecuencia Respiratoria</label>
+                                <span class="text-xs text-slate-500">Normal: 12 - 20 rpm</span>
+                            </div>
+                            <div class="relative">
+                                <input type="number" id="freqRespiratoria" value="14" oninput="calcularTodo()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-rose-500">
+                                <span class="absolute right-3 top-2 text-xs text-slate-500">rpm</span>
+                            </div>
+                        </div>
+
+                        <!-- Frecuencia Cardíaca -->
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="text-xs font-semibold text-slate-400 uppercase">Frecuencia Cardíaca</label>
+                                <span class="text-xs text-slate-500">Atleta: 45 - 80 lpm</span>
+                            </div>
+                            <div class="relative">
+                                <input type="number" id="freqCardiaca" value="58" oninput="calcularTodo()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-rose-500">
+                                <span class="absolute right-3 top-2 text-xs text-slate-500">lpm</span>
+                            </div>
+                        </div>
+
+                        <!-- Saturación de Oxígeno -->
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="text-xs font-semibold text-slate-400 uppercase">Saturación de Oxígeno</label>
+                                <span class="text-xs text-slate-500">Óptimo: 95 - 100%</span>
+                            </div>
+                            <div class="relative">
+                                <input type="number" id="satOxigeno" value="98" min="70" max="100" oninput="calcularTodo()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-rose-500">
+                                <span class="absolute right-3 top-2 text-xs text-slate-500">% SpO2</span>
+                            </div>
+                        </div>
+
+                        <!-- Índice de Glucemia -->
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="text-xs font-semibold text-slate-400 uppercase">Índice de Glucemia</label>
+                                <span class="text-xs text-slate-500">Ayuno baseline: 70 - 100</span>
+                            </div>
+                            <div class="relative">
+                                <input type="number" id="glucemia" value="88" oninput="calcularTodo()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-rose-500">
+                                <span class="absolute right-3 top-2 text-xs text-slate-500">mg/dL</span>
+                            </div>
+                        </div>
+
+                        <!-- Presión Arterial Sistólica -->
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="text-xs font-semibold text-slate-400 uppercase">Presión Sistólica</label>
+                                <span class="text-xs text-slate-500">Normal: 90 - 120</span>
+                            </div>
+                            <div class="relative">
+                                <input type="number" id="paSistolica" value="115" oninput="calcularTodo()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-rose-500">
+                                <span class="absolute right-3 top-2 text-xs text-slate-500">mmHg</span>
+                            </div>
+                        </div>
+
+                        <!-- Presión Arterial Diastólica -->
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="text-xs font-semibold text-slate-400 uppercase">Presión Diastólica</label>
+                                <span class="text-xs text-slate-500">Normal: 60 - 80</span>
+                            </div>
+                            <div class="relative">
+                                <input type="number" id="paDiastolica" value="75" oninput="calcularTodo()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-rose-500">
+                                <span class="absolute right-3 top-2 text-xs text-slate-500">mmHg</span>
+                            </div>
+                        </div>
+
+                        <!-- Temperatura Corporal -->
+                        <div class="md:col-span-2">
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="text-xs font-semibold text-slate-400 uppercase">Temperatura Corporal</label>
+                                <span class="text-xs text-slate-500">Rango Seguro: 36.1°C - 37.2°C</span>
+                            </div>
+                            <div class="relative">
+                                <input type="number" id="temperatura" step="0.1" value="36.6" oninput="calcularTodo()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-rose-500">
+                                <span class="absolute right-3 top-2 text-xs text-slate-500">°C</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Antropometría Básica y Pliegues Cutáneos (ISAK) -->
+                <div class="bg-slate-900 rounded-2xl p-6 border border-slate-800 shadow-xl print-card">
+                    <h2 class="text-lg font-display font-bold text-slate-100 mb-2 flex items-center justify-between">
+                        <span class="flex items-center gap-2"><i class="fa-solid fa-ruler-combined text-rose-500"></i> 3. Antropometría y Pliegues Cutáneos (ISAK)</span>
+                        <span class="text-xs text-amber-400 font-semibold"><i class="fa-solid fa-shield"></i> Protocolo COI / ISAK</span>
+                    </h2>
+                    <p class="text-xs text-slate-400 mb-4">Medición obligatoria de pliegues grasos para deportes de combate para prevención de corte severo de peso deshidratante.</p>
+
+                    <!-- Peso y Talla Básica -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 pb-6 border-b border-slate-800">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Peso Corporal Actual</label>
+                            <div class="relative">
+                                <input type="number" id="peso" step="0.1" value="77.5" oninput="calcularTodo()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-rose-500">
+                                <span class="absolute right-3 top-2 text-xs text-slate-500">kg</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Talla / Estatura</label>
+                            <div class="relative">
+                                <input type="number" id="talla" value="178" oninput="calcularTodo()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-rose-500">
+                                <span class="absolute right-3 top-2 text-xs text-slate-500">cm</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pliegues Cutáneos (6 Sitios ISAK) -->
+                    <h3 class="text-xs font-extrabold uppercase tracking-wider text-rose-400 mb-3 flex items-center gap-1.5">
+                        <i class="fa-solid fa-tape"></i> Registro de Pliegues Cutáneos (Milímetros - mm)
+                    </h3>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">Pliegue Tríceps</label>
+                            <div class="relative">
+                                <input type="number" id="pliegueTriceps" step="0.5" value="7.0" oninput="calcularTodo()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-rose-500">
+                                <span class="absolute right-2 top-2 text-xs text-slate-500">mm</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">Pliegue Subescapular</label>
+                            <div class="relative">
+                                <input type="number" id="pliegueSubescapular" step="0.5" value="9.5" oninput="calcularTodo()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-rose-500">
+                                <span class="absolute right-2 top-2 text-xs text-slate-500">mm</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">Pliegue Suprailíaco</label>
+                            <div class="relative">
+                                <input type="number" id="pliegueSuprailiaco" step="0.5" value="8.0" oninput="calcularTodo()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-rose-500">
+                                <span class="absolute right-2 top-2 text-xs text-slate-500">mm</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">Pliegue Abdominal</label>
+                            <div class="relative">
+                                <input type="number" id="pliegueAbdominal" step="0.5" value="10.0" oninput="calcularTodo()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-rose-500">
+                                <span class="absolute right-2 top-2 text-xs text-slate-500">mm</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">Pliegue Muslo Frontal</label>
+                            <div class="relative">
+                                <input type="number" id="pliegueMuslo" step="0.5" value="9.0" oninput="calcularTodo()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-rose-500">
+                                <span class="absolute right-2 top-2 text-xs text-slate-500">mm</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">Pliegue Pantorrilla Medial</label>
+                            <div class="relative">
+                                <input type="number" id="plieguePantorrilla" step="0.5" value="6.5" oninput="calcularTodo()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-rose-500">
+                                <span class="absolute right-2 top-2 text-xs text-slate-500">mm</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- PANEL DE RESULTADOS, BARRAS DE PROGRESO Y VALIDACIÓN CRUZADA (COLUMNA DERECHA - 5 COLS) -->
+            <div class="lg:col-span-5 space-y-6">
+
+                <!-- PANEL DE DIAGNÓSTICO INTEGRAL Y VALIDACIÓN CRUZADA -->
+                <div id="cardValidacionCruzada" class="rounded-2xl p-6 border shadow-xl transition-all duration-300">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs font-bold uppercase tracking-widest px-2.5 py-1 rounded-md bg-slate-950/40 text-slate-300 flex items-center gap-1.5">
+                            <i class="fa-solid fa-diagram-project text-rose-400"></i> Motor de Validación Cruzada
+                        </span>
+                        <span id="badgeEstadoGeneral" class="px-2.5 py-1 rounded-md text-xs font-bold uppercase"></span>
+                    </div>
+
+                    <h3 id="tituloDiagnostico" class="text-xl font-display font-extrabold text-white mb-2"></h3>
+                    <p id="descDiagnostico" class="text-xs text-slate-300 leading-relaxed mb-4"></p>
+
+                    <!-- Alertas Específicas Cruzadas -->
+                    <div id="listaAlertasCruzadas" class="space-y-2 text-xs">
+                        <!-- Se insertan con JS -->
+                    </div>
+                </div>
+
+                <!-- RESUMEN DE COMPOSICIÓN CORPORAL -->
+                <div class="bg-slate-900 rounded-2xl p-6 border border-slate-800 shadow-xl print-card">
+                    <h3 class="text-sm font-display font-bold text-slate-200 uppercase tracking-wider mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-calculator text-rose-500"></i> Composición Corporal Calculada
+                    </h3>
+
+                    <div class="grid grid-cols-2 gap-3 mb-4">
+                        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-center">
+                            <span class="text-[10px] text-slate-400 uppercase font-semibold">Suma 6 Pliegues</span>
+                            <div id="valSumaPliegues" class="text-xl font-extrabold text-white">0.0 mm</div>
+                        </div>
+                        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-center">
+                            <span class="text-[10px] text-slate-400 uppercase font-semibold">% Grasa Corporal</span>
+                            <div id="valPorcentajeGrasa" class="text-xl font-extrabold text-rose-400">0.0 %</div>
+                        </div>
+                        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-center">
+                            <span class="text-[10px] text-slate-400 uppercase font-semibold">Masa Magra (Músculo)</span>
+                            <div id="valMasaMagra" class="text-xl font-extrabold text-emerald-400">0.0 kg</div>
+                        </div>
+                        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-center">
+                            <span class="text-[10px] text-slate-400 uppercase font-semibold">Masa Grasa Total</span>
+                            <div id="valMasaGrasa" class="text-xl font-extrabold text-amber-400">0.0 kg</div>
+                        </div>
+                    </div>
+
+                    <div class="text-[11px] text-slate-400 bg-slate-950/60 p-2.5 rounded-lg border border-slate-800/80 flex items-center gap-2">
+                        <i class="fa-solid fa-circle-info text-blue-400"></i>
+                        <span>Fórmula Yuhasz / Faulkner modificada para Atletas de Combate COI.</span>
+                    </div>
+                </div>
+
+                <!-- BARRAS DE PROGRESO CON EVALUACIÓN VERDE / ROJO -->
+                <div class="bg-slate-900 rounded-2xl p-6 border border-slate-800 shadow-xl print-card space-y-5">
+                    <h3 class="text-sm font-display font-bold text-slate-200 uppercase tracking-wider mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-bar text-rose-500"></i> Evaluación de Parámetros (Verde/Rojo)
+                    </h3>
+
+                    <!-- Item 1: Frecuencia Respiratoria -->
+                    <div>
+                        <div class="flex justify-between items-center text-xs mb-1">
+                            <span class="text-slate-300 font-medium">Frecuencia Respiratoria</span>
+                            <span id="labelFR" class="font-bold">14 rpm</span>
+                        </div>
+                        <div class="w-full bg-slate-950 h-3 rounded-full overflow-hidden border border-slate-800">
+                            <div id="barFR" class="h-full transition-all duration-500" style="width: 50%;"></div>
+                        </div>
+                        <div class="flex justify-between text-[10px] text-slate-500 mt-1">
+                            <span>< 10 (Riesgo)</span>
+                            <span>Aceptable: 12 - 20 rpm</span>
+                            <span>> 24 (Riesgo)</span>
+                        </div>
+                    </div>
+
+                    <!-- Item 2: Frecuencia Cardíaca -->
+                    <div>
+                        <div class="flex justify-between items-center text-xs mb-1">
+                            <span class="text-slate-300 font-medium">Frecuencia Cardíaca en Reposo</span>
+                            <span id="labelFC" class="font-bold">58 lpm</span>
+                        </div>
+                        <div class="w-full bg-slate-950 h-3 rounded-full overflow-hidden border border-slate-800">
+                            <div id="barFC" class="h-full transition-all duration-500" style="width: 50%;"></div>
+                        </div>
+                        <div class="flex justify-between text-[10px] text-slate-500 mt-1">
+                            <span>< 40 (Bradicardia Severa)</span>
+                            <span>Óptimo Atleta: 45 - 80 lpm</span>
+                            <span>> 100 (Taquicardia)</span>
+                        </div>
+                    </div>
+
+                    <!-- Item 3: Saturación de Oxígeno -->
+                    <div>
+                        <div class="flex justify-between items-center text-xs mb-1">
+                            <span class="text-slate-300 font-medium">Saturación de Oxígeno (SpO2)</span>
+                            <span id="labelSpO2" class="font-bold">98 %</span>
+                        </div>
+                        <div class="w-full bg-slate-950 h-3 rounded-full overflow-hidden border border-slate-800">
+                            <div id="barSpO2" class="h-full transition-all duration-500" style="width: 98%;"></div>
+                        </div>
+                        <div class="flex justify-between text-[10px] text-slate-500 mt-1">
+                            <span>< 92% (Hipoxia Crítica)</span>
+                            <span>Aceptable: 95% - 100%</span>
+                        </div>
+                    </div>
+
+                    <!-- Item 4: Presión Arterial (Sistólica / Diastólica) -->
+                    <div>
+                        <div class="flex justify-between items-center text-xs mb-1">
+                            <span class="text-slate-300 font-medium">Presión Arterial (Sistólica/Diastólica)</span>
+                            <span id="labelPA" class="font-bold">115/75 mmHg</span>
+                        </div>
+                        <div class="w-full bg-slate-950 h-3 rounded-full overflow-hidden border border-slate-800">
+                            <div id="barPA" class="h-full transition-all duration-500" style="width: 60%;"></div>
+                        </div>
+                        <div class="flex justify-between text-[10px] text-slate-500 mt-1">
+                            <span>Hipotensión (< 90/60)</span>
+                            <span>Óptimo: 110-120 / 70-80</span>
+                            <span>Hipertensión (> 140/90)</span>
+                        </div>
+                    </div>
+
+                    <!-- Item 5: Índice de Glucemia -->
+                    <div>
+                        <div class="flex justify-between items-center text-xs mb-1">
+                            <span class="text-slate-300 font-medium">Glucemia Capilar Basal</span>
+                            <span id="labelGlucemia" class="font-bold">88 mg/dL</span>
+                        </div>
+                        <div class="w-full bg-slate-950 h-3 rounded-full overflow-hidden border border-slate-800">
+                            <div id="barGlucemia" class="h-full transition-all duration-500" style="width: 50%;"></div>
+                        </div>
+                        <div class="flex justify-between text-[10px] text-slate-500 mt-1">
+                            <span>< 70 (Hipoglucemia)</span>
+                            <span>Aceptable: 70 - 100 mg/dL</span>
+                            <span>> 126 (Hiperglucemia)</span>
+                        </div>
+                    </div>
+
+                    <!-- Item 6: Temperatura Corporal -->
+                    <div>
+                        <div class="flex justify-between items-center text-xs mb-1">
+                            <span class="text-slate-300 font-medium">Temperatura Corporal</span>
+                            <span id="labelTemp" class="font-bold">36.6 °C</span>
+                        </div>
+                        <div class="w-full bg-slate-950 h-3 rounded-full overflow-hidden border border-slate-800">
+                            <div id="barTemp" class="h-full transition-all duration-500" style="width: 50%;"></div>
+                        </div>
+                        <div class="flex justify-between text-[10px] text-slate-500 mt-1">
+                            <span>Hipotermia (< 35.5°C)</span>
+                            <span>Aceptable: 36.1°C - 37.2°C</span>
+                            <span>Fiebre (> 38.0°C)</span>
+                        </div>
+                    </div>
+
+                    <!-- Item 7: Porcentaje de Grasa Corporal (COI) -->
+                    <div>
+                        <div class="flex justify-between items-center text-xs mb-1">
+                            <span class="text-slate-300 font-medium">Porcentaje de Grasa Corporal (COI Combate)</span>
+                            <span id="labelGrasa" class="font-bold">8.5 %</span>
+                        </div>
+                        <div class="w-full bg-slate-950 h-3 rounded-full overflow-hidden border border-slate-800">
+                            <div id="barGrasa" class="h-full transition-all duration-500" style="width: 50%;"></div>
+                        </div>
+                        <div class="flex justify-between text-[10px] text-slate-500 mt-1">
+                            <span id="minGrasaLabel">< 5% (Grasa Esencial Crítica)</span>
+                            <span>Óptimo Deporte Combate</span>
+                            <span>> 18% (Exceso Competición)</span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- LÓGICA DE CÁLCULO Y VALIDACIÓN CRUZADA EN JAVASCRIPT -->
+    <script>
+        // Función Ejecutada para Calcular y Validar en Tiempo Real
+        function calcularTodo() {
+            // 1. Lectura de Entradas
+            const nombre = document.getElementById('nombre').value || "Atleta";
+            const deporte = document.getElementById('deporte').value;
+            const sexo = document.getElementById('sexo').value;
+            const edad = parseFloat(document.getElementById('edad').value) || 0;
+
+            const fr = parseFloat(document.getElementById('freqRespiratoria').value) || 0;
+            const fc = parseFloat(document.getElementById('freqCardiaca').value) || 0;
+            const spo2 = parseFloat(document.getElementById('satOxigeno').value) || 0;
+            const glucemia = parseFloat(document.getElementById('glucemia').value) || 0;
+            const paSistolica = parseFloat(document.getElementById('paSistolica').value) || 0;
+            const paDiastolica = parseFloat(document.getElementById('paDiastolica').value) || 0;
+            const temp = parseFloat(document.getElementById('temperatura').value) || 0;
+
+            const peso = parseFloat(document.getElementById('peso').value) || 0;
+            const talla = parseFloat(document.getElementById('talla').value) || 0;
+
+            // Pliegues
+            const pTriceps = parseFloat(document.getElementById('pliegueTriceps').value) || 0;
+            const pSubescapular = parseFloat(document.getElementById('pliegueSubescapular').value) || 0;
+            const pSuprailiaco = parseFloat(document.getElementById('pliegueSuprailiaco').value) || 0;
+            const pAbdominal = parseFloat(document.getElementById('pliegueAbdominal').value) || 0;
+            const pMuslo = parseFloat(document.getElementById('pliegueMuslo').value) || 0;
+            const pPantorrilla = parseFloat(document.getElementById('plieguePantorrilla').value) || 0;
+
+            // 2. Cálculos Antropométricos
+            const suma6Pliegues = pTriceps + pSubescapular + pSuprailiaco + pAbdominal + pMuslo + pPantorrilla;
+            
+            // Estimación del Porcentaje de Grasa Corporal (Ecuación Yuhasz adaptada para atletas de combate)
+            let porcentajeGrasa = 0;
+            if (sexo === 'Masculino') {
+                porcentajeGrasa = 3.64 + (suma6Pliegues * 0.097);
+            } else {
+                porcentajeGrasa = 4.56 + (suma6Pliegues * 0.143);
+            }
+
+            if (porcentajeGrasa < 3) porcentajeGrasa = 3; // Límite inferior fisiológico
+
+            const masaGrasaKg = (peso * (porcentajeGrasa / 100));
+            const masaMagraKg = peso - masaGrasaKg;
+
+            // Renderizar Antropometría
+            document.getElementById('valSumaPliegues').innerText = suma6Pliegues.toFixed(1) + ' mm';
+            document.getElementById('valPorcentajeGrasa').innerText = porcentajeGrasa.toFixed(1) + ' %';
+            document.getElementById('valMasaMagra').innerText = masaMagraKg.toFixed(1) + ' kg';
+            document.getElementById('valMasaGrasa').innerText = masaGrasaKg.toFixed(1) + ' kg';
+
+            // 3. Evaluación de Parámetros Individuales (Lógica Verde / Rojo)
+            const alertas = [];
+            let esAceptableGeneral = true;
+
+            // 3.1 Frecuencia Respiratoria (OMS: 12 - 20)
+            const barFR = document.getElementById('barFR');
+            const labelFR = document.getElementById('labelFR');
+            labelFR.innerText = fr + " rpm";
+            if (fr >= 12 && fr <= 20) {
+                setBar(barFR, Math.min(100, Math.max(10, (fr / 25) * 100)), true);
+            } else {
+                setBar(barFR, Math.min(100, Math.max(10, (fr / 25) * 100)), false);
+                alertas.push({ tipo: 'danger', texto: `Frecuencia Respiratoria fuera de rango (${fr} rpm). Rango OMS: 12-20 rpm.` });
+                esAceptableGeneral = false;
+            }
+
+            // 3.2 Frecuencia Cardíaca (Atleta: 45 - 85 lpm)
+            const barFC = document.getElementById('barFC');
+            const labelFC = document.getElementById('labelFC');
+            labelFC.innerText = fc + " lpm";
+            if (fc >= 45 && fc <= 85) {
+                setBar(barFC, Math.min(100, Math.max(10, (fc / 120) * 100)), true);
+            } else {
+                setBar(barFC, Math.min(100, Math.max(10, (fc / 120) * 100)), false);
+                if (fc < 45) alertas.push({ tipo: 'warning', texto: `Bradicardia marcante (${fc} lpm). Normal en atletas elite, evaluar posible fatiga SNC.` });
+                if (fc > 85) alertas.push({ tipo: 'danger', texto: `Frecuencia cardíaca elevada en reposo (${fc} lpm). Posible deshidratación o estrés.` });
+                if (fc > 90 || fc < 40) esAceptableGeneral = false;
+            }
+
+            // 3.3 Saturación de Oxígeno (Johns Hopkins / OMS: 95 - 100%)
+            const barSpO2 = document.getElementById('barSpO2');
+            const labelSpO2 = document.getElementById('labelSpO2');
+            labelSpO2.innerText = spo2 + " %";
+            if (spo2 >= 95 && spo2 <= 100) {
+                setBar(barSpO2, spo2, true);
+            } else {
+                setBar(barSpO2, spo2, false);
+                alertas.push({ tipo: 'danger', texto: `Saturación de Oxígeno reducida (${spo2}%). Riesgo de hipoxia o compromiso respiratorio.` });
+                esAceptableGeneral = false;
+            }
+
+            // 3.4 Presión Arterial (Sistólica 90-120 / Diastólica 60-80)
+            const barPA = document.getElementById('barPA');
+            const labelPA = document.getElementById('labelPA');
+            labelPA.innerText = `${paSistolica}/${paDiastolica} mmHg`;
+            const paAceptable = (paSistolica >= 95 && paSistolica <= 125) && (paDiastolica >= 60 && paDiastolica <= 82);
+            if (paAceptable) {
+                setBar(barPA, 60, true);
+            } else {
+                setBar(barPA, paSistolica > 130 ? 90 : 30, false);
+                alertas.push({ tipo: 'danger', texto: `Presión Arterial fuera de rango (${paSistolica}/${paDiastolica} mmHg). Criterio IMSS/OMS.` });
+                esAceptableGeneral = false;
+            }
+
+            // 3.5 Glucemia (OMS / IMSS: 70 - 100 mg/dL en ayunas)
+            const barGlucemia = document.getElementById('barGlucemia');
+            const labelGlucemia = document.getElementById('labelGlucemia');
+            labelGlucemia.innerText = glucemia + " mg/dL";
+            if (glucemia >= 70 && glucemia <= 110) {
+                setBar(barGlucemia, Math.min(100, Math.max(10, (glucemia / 140) * 100)), true);
+            } else {
+                setBar(barGlucemia, Math.min(100, Math.max(10, (glucemia / 140) * 100)), false);
+                if (glucemia < 70) alertas.push({ tipo: 'danger', texto: `Hipoglucemia detectada (${glucemia} mg/dL). Riesgo de síncope y pérdida de fuerza explosiva.` });
+                if (glucemia > 110) alertas.push({ tipo: 'danger', texto: `Glucemia elevada (${glucemia} mg/dL).` });
+                esAceptableGeneral = false;
+            }
+
+            // 3.6 Temperatura Corporal (36.1 - 37.2 °C)
+            const barTemp = document.getElementById('barTemp');
+            const labelTemp = document.getElementById('labelTemp');
+            labelTemp.innerText = temp.toFixed(1) + " °C";
+            if (temp >= 36.0 && temp <= 37.3) {
+                setBar(barTemp, 50, true);
+            } else {
+                setBar(barTemp, temp > 37.3 ? 85 : 20, false);
+                alertas.push({ tipo: 'danger', texto: `Temperatura corporal anómala (${temp}°C). Riesgo de golpe de calor o hipotermia.` });
+                esAceptableGeneral = false;
+            }
+
+            // 3.7 Porcentaje de Grasa Corporal (Criterio COI para Combate)
+            // Hombres combate: 5% - 12% | Mujeres combate: 10% - 18%
+            const barGrasa = document.getElementById('barGrasa');
+            const labelGrasa = document.getElementById('labelGrasa');
+            labelGrasa.innerText = porcentajeGrasa.toFixed(1) + " %";
+
+            let minGrasa = (sexo === 'Masculino') ? 5.0 : 10.0;
+            let maxGrasa = (sexo === 'Masculino') ? 13.0 : 20.0;
+
+            if (porcentajeGrasa >= minGrasa && porcentajeGrasa <= maxGrasa) {
+                setBar(barGrasa, Math.min(100, (porcentajeGrasa / 25) * 100), true);
+            } else {
+                setBar(barGrasa, Math.min(100, (porcentajeGrasa / 25) * 100), false);
+                if (porcentajeGrasa < minGrasa) {
+                    alertas.push({ tipo: 'danger', texto: `% Grasa corporal críticamente bajo (${porcentajeGrasa.toFixed(1)}%). Riesgo de compromiso hormonal e inmunológico.` });
+                } else {
+                    alertas.push({ tipo: 'warning', texto: `% Grasa elevado para deportes de combate (${porcentajeGrasa.toFixed(1)}%). Fuera del rango óptimo COI.` });
+                }
+                if (porcentajeGrasa < minGrasa) esAceptableGeneral = false;
+            }
+
+
+            // 4. MOTOR DE VALIDACIÓN CRUZADA MULTIVARIABLE (CROSS-VALIDATION LOGIC)
+            // Análisis cruzado entre variables para detectar síndromes de peligro en combate:
+            
+            // Regla Cruzada 1: Deshidratación Aguda por Corte Severo de Peso (Taquicardia + Hipotensión + Glucemia Baja)
+            if (fc > 80 && paSistolica < 100 && glucemia < 75) {
+                alertas.push({
+                    tipo: 'critical',
+                    texto: 'CRÍTICO [Validación Cruzada]: Alerta de Corte Severo de Peso Deshidratante. Combinación de Frecuencia Cardíaca alta, Hipotensión y Glucemia baja. Atleta NO APTO para combate en este momento.'
+                });
+                esAceptableGeneral = false;
+            }
+
+            // Regla Cruzada 2: Sufrimiento Metabólico / Hipoxia Periférica (SpO2 baja + FR elevada)
+            if (spo2 < 95 && fr > 20) {
+                alertas.push({
+                    tipo: 'critical',
+                    texto: 'CRÍTICO [Validación Cruzada]: Alerta de Insuficiencia Ventilatoria. SpO2 baja combinada con Taquipnea. Suspender sesión de sparring inmediatamente.'
+                });
+                esAceptableGeneral = false;
+            }
+
+            // Regla Cruzada 3: Riesgo Cardioventilar en Peso Extremo (Grasa < 5% + PA sistólica alta)
+            if (porcentajeGrasa < 5.0 && paSistolica > 130) {
+                alertas.push({
+                    tipo: 'critical',
+                    texto: 'CRÍTICO [Validación Cruzada]: Estrés Cardiovascular severo en atleta con masa grasa en límite biológico vital.'
+                });
+                esAceptableGeneral = false;
+            }
+
+
+            // 5. RENDERIZADO DEL DIAGNÓSTICO INTEGRAL
+            const cardValidacion = document.getElementById('cardValidacionCruzada');
+            const badgeEstado = document.getElementById('badgeEstadoGeneral');
+            const tituloDiag = document.getElementById('tituloDiagnostico');
+            const descDiag = document.getElementById('descDiagnostico');
+            const listaAlertas = document.getElementById('listaAlertasCruzadas');
+
+            listaAlertas.innerHTML = '';
+
+            if (esAceptableGeneral && alertas.length === 0) {
+                cardValidacion.className = "bg-gradient-to-br from-slate-900 via-emerald-950/40 to-slate-900 border-emerald-500/50 rounded-2xl p-6 border shadow-xl shadow-emerald-950/20 print-card";
+                badgeEstado.className = "px-2.5 py-1 rounded-md text-xs font-bold uppercase bg-emerald-500 text-slate-950";
+                badgeEstado.innerText = "APTO PARA COMPETENCIA";
+                tituloDiag.innerText = `Atleta ${nombre} en Condición Óptima`;
+                tituloDiag.className = "text-xl font-display font-extrabold text-emerald-400 mb-2";
+                descDiag.innerText = `Todos los parámetros fisiológicos, signos vitales y pliegues antropométricos se encuentran dentro de los márgenes normativos aceptables establecidos por la OMS, Johns Hopkins y el Comité Olímpico Internacional para ${deporte}.`;
+            } else if (!esAceptableGeneral || alertas.some(a => a.tipo === 'critical' || a.tipo === 'danger')) {
+                cardValidacion.className = "bg-gradient-to-br from-slate-900 via-rose-950/40 to-slate-900 border-rose-500/50 rounded-2xl p-6 border shadow-xl shadow-rose-950/20 print-card";
+                badgeEstado.className = "px-2.5 py-1 rounded-md text-xs font-bold uppercase bg-rose-600 text-white animate-pulse";
+                badgeEstado.innerText = "NO APTO / ALERTA FISIOLÓGICA";
+                tituloDiag.innerText = `Atención: Riesgo Detectado en ${nombre}`;
+                tituloDiag.className = "text-xl font-display font-extrabold text-rose-400 mb-2";
+                descDiag.innerText = `La validación cruzada ha detectado discrepancias o valores críticos fuera del rango fisiológico seguro para practicantes de ${deporte}. Se requiere intervención nutricional y médica inmediata.`;
+            } else {
+                cardValidacion.className = "bg-gradient-to-br from-slate-900 via-amber-950/40 to-slate-900 border-amber-500/50 rounded-2xl p-6 border shadow-xl shadow-amber-950/20 print-card";
+                badgeEstado.className = "px-2.5 py-1 rounded-md text-xs font-bold uppercase bg-amber-500 text-slate-950";
+                badgeEstado.innerText = "PRECAUCIÓN / MONITOREO";
+                tituloDiag.innerText = `Evaluación con Observaciones de Precaución`;
+                tituloDiag.className = "text-xl font-display font-extrabold text-amber-400 mb-2";
+                descDiag.innerText = `Existen desviaciones leves en los indicadores de ${nombre} que requieren ajuste en la hidratación o corte de peso.`;
+            }
+
+            // Renderizar Lista de Alertas Detalladas
+            if (alertas.length > 0) {
+                alertas.forEach(a => {
+                    const item = document.createElement('div');
+                    let bgBorder = "bg-rose-950/60 border-rose-500/40 text-rose-200";
+                    let icon = "fa-triangle-exclamation text-rose-400";
+
+                    if (a.tipo === 'warning') {
+                        bgBorder = "bg-amber-950/60 border-amber-500/40 text-amber-200";
+                        icon = "fa-circle-exclamation text-amber-400";
+                    } else if (a.tipo === 'critical') {
+                        bgBorder = "bg-red-900/80 border-red-500 text-white font-semibold";
+                        icon = "fa-skull-crossbones text-red-300";
+                    }
+
+                    item.className = `p-2.5 rounded-lg border ${bgBorder} flex items-start gap-2.5`;
+                    item.innerHTML = `<i class="fa-solid ${icon} mt-0.5"></i> <span>${a.texto}</span>`;
+                    listaAlertas.appendChild(item);
+                });
+            } else {
+                const item = document.createElement('div');
+                item.className = "p-2.5 rounded-lg border bg-emerald-950/40 border-emerald-500/30 text-emerald-300 flex items-center gap-2";
+                item.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400"></i> <span>Sin hallazgos patológicos o alertas antropométricas. Presión, glucemia e hidratación en equilibrio homeostático.</span>`;
+                listaAlertas.appendChild(item);
+            }
+        }
+
+        // Función Auxiliar para Estilar las Barras de Progreso (Verde = Aceptable, Rojo = No Aceptable)
+        function setBar(barElement, percentage, isAcceptable) {
+            barElement.style.width = `${Math.min(100, Math.max(5, percentage))}%`;
+            if (isAcceptable) {
+                barElement.className = "h-full transition-all duration-500 bg-emerald-500 shadow-lg shadow-emerald-500/50";
+            } else {
+                barElement.className = "h-full transition-all duration-500 bg-rose-600 shadow-lg shadow-rose-600/50";
+            }
+        }
+
+        // Función para Cargar Casos Preestablecidos de Prueba
+        function cargarAtletaEjemplo(tipo) {
+            if (tipo === 'optimo') {
+                document.getElementById('nombre').value = "Carlos 'El Volcán' Mendoza";
+                document.getElementById('deporte').value = "MMA";
+                document.getElementById('sexo').value = "Masculino";
+                document.getElementById('edad').value = 25;
+                document.getElementById('freqRespiratoria').value = 14;
+                document.getElementById('freqCardiaca').value = 54;
+                document.getElementById('satOxigeno').value = 99;
+                document.getElementById('glucemia').value = 88;
+                document.getElementById('paSistolica').value = 115;
+                document.getElementById('paDiastolica').value = 75;
+                document.getElementById('temperatura').value = 36.6;
+                document.getElementById('peso').value = 77.5;
+                document.getElementById('talla').value = 178;
+                document.getElementById('pliegueTriceps').value = 6.5;
+                document.getElementById('pliegueSubescapular').value = 8.5;
+                document.getElementById('pliegueSuprailiaco').value = 7.0;
+                document.getElementById('pliegueAbdominal').value = 8.0;
+                document.getElementById('pliegueMuslo').value = 8.0;
+                document.getElementById('plieguePantorrilla').value = 5.5;
+            } else if (tipo === 'riesgo') {
+                document.getElementById('nombre').value = "Mariana 'La Furia' Gómez";
+                document.getElementById('deporte').value = "Boxeo";
+                document.getElementById('sexo').value = "Femenino";
+                document.getElementById('edad').value = 22;
+                document.getElementById('freqRespiratoria').value = 24;
+                document.getElementById('freqCardiaca').value = 98;
+                document.getElementById('satOxigeno').value = 92;
+                document.getElementById('glucemia').value = 58;
+                document.getElementById('paSistolica').value = 90;
+                document.getElementById('paDiastolica').value = 55;
+                document.getElementById('temperatura').value = 37.8;
+                document.getElementById('peso').value = 52.0;
+                document.getElementById('talla').value = 165;
+                document.getElementById('pliegueTriceps').value = 3.5;
+                document.getElementById('pliegueSubescapular').value = 4.0;
+                document.getElementById('pliegueSuprailiaco').value = 3.0;
+                document.getElementById('pliegueAbdominal').value = 3.5;
+                document.getElementById('pliegueMuslo').value = 4.0;
+                document.getElementById('plieguePantorrilla').value = 3.0;
+            }
+            calcularTodo();
+        }
+
+        // Inicializar al cargar la página
+        window.onload = function() {
+            calcularTodo();
+        };
+    </script>
+</body>
+</html>
